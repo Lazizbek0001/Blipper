@@ -1,0 +1,135 @@
+{% load static %}
+{% block content %}
+
+<style>
+    .rec-account-con {
+        background: var(--bgColor);
+        position: absolute;
+        padding-top: 30px;
+        height: calc(100% + 65vh);
+        top: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 95;
+        width: 256px;
+        border-left: 2px solid var(--bgBonusColor);
+    }
+
+    .rec-acc-card {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 20px;
+        font-size: 10px;
+        width: 100%;
+        height: auto;
+    }
+
+    .rec-account-con .acc-text {
+        margin-left: 15px;
+        margin-bottom: var(--h1-mb);
+        font-size: var(--h1-size);
+        color: var(--h1-color);
+    }
+
+    .rec-acc-card .rec-acc-info {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .rec-acc-nick {
+        max-width: 100px;
+        cursor: pointer;
+    }
+
+    .rec-acc-img {
+        display: flex;
+        align-items: center;
+    }
+
+    .rec-acc-card img {
+        border-radius: 50%;
+        width: 35px;
+        height: 35px;
+    }
+
+    .view-acc {
+        padding: 5px 10px;
+        white-space: nowrap;
+        border: none;
+        margin-left: 10px;
+        border-radius: 20px;
+        font-size: 8px;
+    }
+
+    .view-acc a {
+        color: var(--textBonusColor);
+    }
+
+    @media only screen and (max-width: 1290px) {
+        .rec-account-con {
+            width: 300px;
+            padding-top: 25px;
+        }
+
+        .rec-acc-card {
+            font-size: 15px;
+        }
+
+        .view-acc {
+            font-size: 10px;
+        }
+    }
+
+    @media only screen and (max-width: 1100px) {
+        .rec-account-con {
+            width: 280px;
+        }
+
+        .rec-acc-card {
+            font-size: 13px;
+        }
+
+        .view-acc {
+            font-size: 9px;
+        }
+    }
+</style>
+
+<div class="rec-account-con">
+    <h2 class="acc-text">Accounts</h2>
+    {% for res in users|slice:5 %}
+    {% if res.user != request.user %}
+    <div class="rec-acc-card">
+
+        <div class="rec-acc-info">
+            <div class="rec-acc-img">
+                {% if res.profile_image %}
+                <img src="{{ res.profile_image.url }}" width=50 height=50 class="rounded-circle">
+                {% else %}
+                <img src="{% static 'images/def_pic.png' %}" width=50 height=50 class="img-fluid rounded-start">
+                {% endif %}
+            </div>
+            <a href="{% url 'profile' res.id%}">
+                @{{res.user.username}}
+            </a>
+        </div>
+
+        {% if res not in request.user.profile.follows.all %}
+        <button class="view-acc">
+            <a href="{% url 'follow' res.id%}"><strong> Follow </strong> </a>
+        </button>
+        {% else %}
+        <button class="view-acc">
+            <a href="{% url 'unfollow' res.id%}"> <strong>Unfollow </strong></a>
+        </button>
+        {% endif %}
+
+    </div>
+    {% endif %}
+    {% endfor %}
+</div>
+
+
+{% endblock %}

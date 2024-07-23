@@ -1,0 +1,104 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<style>
+    .edit-card {
+        background: var(--bgColor);
+        color: var(--textColor);
+        padding: 20px 35px 200px 20px;
+        display: flex;
+        gap: 20px;
+        position: relative;
+        border: 3px solid var(--bgBonusColor);
+        border-left: none;
+        margin: 0 var(--basic-mr) 0px var(--basic-ml);
+    }
+
+    .edit-card img {
+        width: 45px;
+        height: 45px;
+        object-fit: cover;
+        border-radius: 50%;
+    }
+
+    .edit-card .edit-btn {
+        cursor: pointer;
+        background: var(--textColor);
+        position: absolute;
+        bottom: 10px;
+        right: 10px;
+        border: none;
+        padding: 7px 25px;
+        font-size: 17px;
+        border-radius: 30px;
+    }
+
+    img {
+        object-fit: cover;
+    }
+
+    .edit-text {
+        margin-left: var(--h1-ml);
+        margin-bottom: var(--h1-mb);
+        font-size: var(--h1-size);
+        color: var(--h1-color);
+        display: flex;
+        align-items: center;
+    }
+
+    .edit-text a {
+        color: currentColor;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 30px;
+        width: 30px;
+        border-radius: 50%;
+        transition: 0.4s;
+        font-size: 20px;
+    }
+
+    .edit-text a:hover {
+        background: var(--bgBonusColor);
+    }
+
+    .edit-info {
+        color: var(--textColor);
+        position: absolute;
+        bottom: 17px;
+        left: 20px;
+    }
+
+</style>
+
+<div class="edit-con">
+    <h1 class="edit-text">
+        <a href="{% url 'home' %}">
+            <i class="fa-solid fa-chevron-left"></i>
+        </a>
+        &nbsp; Edit Blip
+    </h1>
+
+    <div class="edit-card" role="alert">
+        {% if request.user.profile.profile_image %}
+        <img src="{{request.user.profile.profile_image.url}}">
+        {% else %}
+        <img src="{% static 'images/def_pic.png' %}">
+        {% endif %}
+        {% if form %}
+        <form method="POST">
+            {% csrf_token %}
+            {{form.as_p}}
+
+            <p class="edit-info">
+                This Blip Posted in:
+                <span> {{tweet.created_at|date:"F j, Y"}} </span>
+            </p>
+            <button type="submit" class="edit-btn"> Edit </button>
+        </form>
+        {% endif %}
+    </div>
+</div>
+
+{% endblock %}

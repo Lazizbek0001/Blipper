@@ -1,0 +1,462 @@
+<style>
+    .header .container-navbar {
+        max-width: 1100px;
+        margin: 0 auto;
+    }
+
+    .header {
+        background: var(--bgColor);
+        padding: 30px 58px 30px 30px;
+        top: 0;
+        height: 100%;
+        position: fixed;
+        z-index: 100;
+        border-right: 2px solid var(--bgBonusColor);
+    }
+
+    .header .navbar .main-logo {
+        width: 150px;
+        margin-bottom: 35px;
+    }
+
+    .header .navbar .main-logo img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .navbar .navbars {
+        text-transform: uppercase;
+    }
+
+    .navbar .navbars a {
+        font-size: 20px;
+        display: inline-block;
+        transition: 0.3s;
+        margin: 10px 0;
+    }
+
+    .navbar .navbars a i {
+        width: 18px;
+    }
+
+    .navbar .navbars a:hover {
+        color: var(--textBonusColor);
+    }
+
+    .logout-bar {
+        font-size: 20px;
+        display: inline-block;
+        transition: 0.3s;
+        margin: 10px 0;
+        border: none;
+        background: transparent;
+        color: var(--textColor);
+        cursor: pointer;
+        text-transform: uppercase;
+    }
+
+    .logout-bar:hover {
+        color: var(--textBonusColor);
+    }
+
+    .navbar .my-profile-link {
+        margin-top: 5px;
+        position: absolute;
+        bottom: 30px;
+        left: 35px;
+        font-size: 20px;
+        transition: 0.3s;
+        padding: 5px 30px 5px 10px;
+        border-radius: 50px;
+        cursor: pointer;
+    }
+
+    .navbar .my-profile-link:hover {
+        background: var(--textBonusColor);
+    }
+
+    .navbar .my-profile-link:hover a {
+        color: var(--bgBonusColor);
+    }
+
+    .navbar .my-profile-link a {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 15px;
+        transition: 0.3s;
+    }
+
+    .my-profile-link img {
+        border-radius: 50%;
+        width: 45px;
+        height: 45px;
+        object-fit: cover;
+    }
+
+    .navbar .navbars .blip-link {
+        margin-top: 30px;
+        border: none;
+        background: var(--textColor);
+        border-radius: 40px;
+        transition: 0.3s;
+        cursor: pointer;
+        padding: 10px 20px;
+        font-size: 20px;
+    }
+
+    .navbar .navbars .blip-link a {
+        color: var(--bgColor);
+    }
+
+    .navbar .navbars .blip-link:hover {
+        background: var(--textBonusColor);
+    }
+
+    .navbar .navbars .blip-link:hover a {
+        color: var(--bgBonusColor);
+    }
+
+    .gap {
+        height: 20px;
+    }
+
+    .modal {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) scale(0);
+        transition: 200ms ease-in-out;
+        z-index: 10;
+        background-color: var(--bgColor);
+        color: var(--textColor);
+        border-radius: 30px;
+    }
+
+    .modal.active {
+        transform: translate(-50%, -50%) scale(1);
+    }
+
+    .blip-share-card-2 {
+        background: var(--bgColor);
+        color: var(--textColor);
+        padding: 20px 35px 300px 20px;
+        display: flex;
+        gap: 20px;
+        position: relative;
+        margin: 0 255px 0px 270px;
+        width: calc(100% + 150px);
+        right: 335px;
+        border-radius: 30px;
+        border: 1px solid #000;
+    }
+
+    .blip-share-card-2 img {
+        width: 45px;
+        height: 45px;
+        object-fit: cover;
+        border-radius: 50%;
+    }
+
+    .blip-share-card-2 .blip-btn-submit {
+        cursor: pointer;
+        background: var(--textColor);
+        position: absolute;
+        bottom: 10px;
+        right: 10px;
+        border: none;
+        padding: 7px 25px;
+        font-size: 17px;
+        border-radius: 30px;
+    }
+
+    #overlay {
+        position: fixed;
+        opacity: 0;
+        transition: 200ms ease-in-out;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(0, 0, 0, 0.7);
+        pointer-events: none;
+    }
+
+    #overlay.active {
+        opacity: 1;
+        pointer-events: all;
+    }
+
+    .logout-modal {
+        width: 320px;
+        padding: 20px;
+    }
+
+    .modal-header {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-transform: initial;
+        padding: 10px 10px 20px 10px;
+    }
+
+    .modal-header img {
+        height: 40px;
+    }
+
+    .modal-body {
+        padding: 10px;
+    }
+
+    .modal-title {
+        font-size: 20px;
+        padding-bottom: 5px;
+        text-transform: initial;
+    }
+
+    .modal-warning-text {
+        text-transform: initial;
+        color: var(--textBonusColor);
+    }
+
+    .modal-btns {
+        text-align: center;
+        display: grid;
+        grid-template-columns: auto;
+        justify-content: center;
+    }
+
+    .modal-btns button {
+        font-size: 20px;
+        border: 1px solid var(--textColor);
+        cursor: pointer;
+        padding: 5px 20px;
+        background: transparent;
+        color: var(--textColor);
+        border-radius: 30px;
+        transition: 0.3s;
+    }
+
+    .modal-btns button:hover {
+        background: var(--bgBonusColor);
+    }
+
+    .modal-btns a {
+        padding: 5px 20px;
+        width: 270px;
+        background: var(--textColor);
+        color: var(--bgColor);
+        border-radius: 30px;
+        text-transform: initial;
+    }
+
+    .modal-btns a:hover {
+        background: var(--textBonusColor);
+        color: var(--bgColor) !important;
+    }
+
+    .blip-link i {
+        display: none;
+    }
+
+    @media only screen and (max-width: 1290px) {
+        .header {
+            padding-right: 15px;
+            border-left: none;
+        }
+
+        .main-logo {
+            display: none;
+        }
+
+        .navbar .navbars ul {
+            display: flex;
+        }
+
+        .navbar .navbars a {
+            font-size: 30px;
+        }
+
+        .navbar .navbars a span {
+            display: none;
+        }
+
+        .navbar .navbars .logout-bar {
+            font-size: 30px;
+        }
+
+        .navbar .navbars .logout-bar span {
+            display: none;
+        }
+
+        .blip-link span {
+            display: none;
+        }
+
+        .blip-link {
+            padding: 15px !important;
+            margin-left: -10px;
+        }
+
+        .blip-link i {
+            display: block;
+        }
+
+        .my-profile-link {
+            margin-left: -10px;
+            padding: 0 !important;
+        }
+
+        .my-profile-link span {
+            display: none;
+        }
+
+        .modal-btns a {
+            font-size: 20px !important;
+        }
+    }
+</style>
+
+
+{% load static %}
+<header class="header">
+    <nav class="navbar">
+        <div class="container-navbar">
+            <div class="main-logo">
+                <a href="{% url 'home' %}">
+                    <img src="../../media/images/main-logo.png">
+                </a>
+            </div>
+            <ul class="navbars">
+                <li>
+                    <a href="{% url 'home' %}">
+                        <i class="fa-solid fa-house"></i> &nbsp; <span> Home </span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'search_user' %}">
+                        <i class="fa-solid fa-magnifying-glass"></i> &nbsp; <span> Search </span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'profile-list' %}">
+                        <i class="fa-solid fa-users"></i> &nbsp; <span> Profile List </span>
+                    </a>
+                </li>
+                {% if user.is_authenticated %}
+                <li>
+                    <a href="{% url 'notification' %}">
+                        <i class="fa-solid fa-bell"></i> &nbsp; <span> Notifications </span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'bookmark' %}">
+                        <i class="fa-solid fa-bookmark"></i> &nbsp; <span> Bookmarks </span>
+                    </a>
+                </li>
+                <li>
+                    <button data-modal-target="#logout-modal" class="logout-bar">
+                        <i class="fa-solid fa-right-from-bracket"></i> &nbsp; <span> Log Out </span>
+                    </button>
+                    <div class="modal logout-modal" id="logout-modal">
+                        <div class="modal-header">
+                            <img src="../../media/images/main-logo.png" alt="">
+                        </div>
+                        <div class="modal-body">
+                            <h2 class="modal-title"> Exit from Blipper? </h2>
+                            <p class="modal-warning-text">
+                                You can always revert to your previous account 
+                                if you remember your password or other
+                                login details. This way, you can easily switch back 
+                                whenever you need to.
+                            </p>
+                        </div>
+                        <div class="modal-btns">
+                            <a href="{% url 'logout'%}"> Log out </a>
+                            <button data-close-button class="close-button"> Cancel </button>
+                        </div>
+                    </div>
+                    <div id="overlay"></div>
+                </li>
+                <button data-modal-target="#modal" class="blip-link"> <i class="fa-solid fa-feather"></i> <span> Post a
+                        Blip </span> </button>
+                <div class="modal" id="modal">
+                    <div class="blip-share-card-2">
+                        {% if form %}
+                        {% if user.profile.profile_image %}
+                        <img src="{{user.profile.profile_image.url}}" width=50 height=50 class="rounded-circle">
+                        {% else %}
+                        <img src="{% static 'images/def_pic.png' %}" width=50 height=50 class="img-fluid rounded-start">
+                        {% endif %}
+                        <form method="POST" action="{% url 'home' %}">
+                            {% csrf_token %}
+                            {{ form.as_p }}
+
+                            <br>
+                            <button type="submit" name="meep_form" class="blip-btn-submit">Blip</button>
+                        </form>
+                        {% endif %}
+                    </div>
+                </div>
+                <div id="overlay"></div>
+
+                {% endif %}
+            </ul>
+            {% if user.is_authenticated %}
+            <li class="my-profile-link">
+                <a href="{% url 'profile' request.user.id %}">
+                    {% if request.user.profile.profile_image %}
+                    <img src="{{ request.user.profile.profile_image.url}}" class="rounded-circle" width=30 height="30"
+                        alt="">
+                    {%else%}
+                    <img src="{% static 'images/def_pic.png' %}" class="img-fluid rounded-start" width=30
+                        alt="Profile Image">
+                    {% endif %}
+                    <span> Profile </span>
+                </a>
+            </li>
+            {% endif %}
+
+        </div>
+    </nav>
+</header>
+
+<script>
+    const openModalButtons = document.querySelectorAll('[data-modal-target]')
+    const closeModalButtons = document.querySelectorAll('[data-close-button]')
+    const overlay = document.getElementById('overlay')
+
+    openModalButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const modal = document.querySelector(button.dataset.modalTarget)
+            openModal(modal)
+        })
+    })
+
+    overlay.addEventListener('click', () => {
+        const modals = document.querySelectorAll('.modal.active')
+        modals.forEach(modal => {
+            closeModal(modal)
+        })
+    })
+
+    closeModalButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const modal = button.closest('.modal')
+            closeModal(modal)
+        })
+    })
+
+    function openModal(modal) {
+        if (modal == null) return
+        modal.classList.add('active')
+        overlay.classList.add('active')
+    }
+
+    function closeModal(modal) {
+        if (modal == null) return
+        modal.classList.remove('active')
+        overlay.classList.remove('active')
+    }
+</script>

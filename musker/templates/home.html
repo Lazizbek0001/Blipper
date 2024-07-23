@@ -1,0 +1,243 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+{% if user.is_authenticated %}
+{% include 'accounts-navbar.html' %}
+{% endif %}
+<style>
+    body {
+        background: var(--bgColor);
+        overflow-x: hidden;
+    }
+
+    .blip-h1-con {
+        border-right: 2px solid var(--bgBonusColor);
+        margin-right: var(--base-mr);
+    }
+
+
+    .blip-card {
+        background: var(--bgColor);
+        color: var(--textColor);
+        padding: 20px 25px 20px 20px;
+        display: flex;
+        gap: 20px;
+        position: relative;
+        margin: 0 var(--basic-mr) 0 var(--basic-ml);
+        border: 1px solid var(--bgBonusColor);
+        border-left: none;
+        margin-top: -1px;
+    }
+
+    .blip-img-con img {
+        height: 45px;
+        width: 45px;
+        object-fit: cover;
+        border-radius: 50%;
+    }
+
+    .blip-card a {
+        color: var(--textBonusColor);
+    }
+
+    .blip-card .blipper-nickname a {
+        font-size: 15px;
+    }
+
+    .blip-card .blipper-nickname a:hover {
+        text-decoration: underline;
+    }
+
+    .blip-card .blip-shared-time {
+        position: absolute;
+        right: 25px;
+        color: var(--textBonusColor);
+        font-size: 14px;
+    }
+
+    .blip-card .blip-broadcast {
+        margin-top: 5px;
+        padding-bottom: 50px;
+        font-size: 17px;
+    }
+
+    .blip-card .blip-actions {
+        display: flex;
+        justify-content: end;
+        gap: 40px;
+        font-size: 20px;
+        margin: 0 20px;
+        position: absolute;
+        left: 85px;
+        right: 15px;
+        bottom: 10px;
+    }
+
+    .blip-card .blip-actions .liked {
+        color: #f00;
+    }
+
+    .blip-card .blip-actions .bookmarked {
+        color: #ffc800;
+    }
+
+    .blip-card .blip-actions .liked-number {
+        color: var(--textBonusColor);
+    }
+
+    .line {
+        height: 1px;
+        background: var(--textColor);
+        margin: 20px 0;
+        position: absolute;
+        left: 80px;
+        right: 20px;
+        bottom: 30px;
+    }
+
+    .blip-share-card {
+        background: var(--bgColor);
+        color: var(--textColor);
+        padding: 20px 35px 65px 20px;
+        display: flex;
+        gap: 20px;
+        position: relative;
+        border: 3px solid var(--bgBonusColor);
+        border-left: none;
+        margin: 0 var(--basic-mr) 0px var(--basic-ml);
+    }
+
+    .blip-share-card img {
+        width: 45px;
+        height: 45px;
+        object-fit: cover;
+        border-radius: 50%;
+    }
+
+    .blip-share-card .blip-btn-submit {
+        cursor: pointer;
+        background: var(--textColor);
+        position: absolute;
+        bottom: 10px;
+        right: 10px;
+        border: none;
+        padding: 7px 25px;
+        font-size: 17px;
+        border-radius: 30px;
+    }
+
+    img {
+        object-fit: cover;
+    }
+
+    .text_home h1 {
+        margin-left: var(--h1-ml);
+        margin-bottom: var(--h1-mb);
+        font-size: var(--h1-size);
+        color: var(--h1-color);
+    }
+
+    @media only screen and (max-width: 1290px) {
+        .blip-card .blipper-nickname a {
+            font-size: 13px;
+        }
+
+        .blip-card .blip-broadcast {
+            font-size: 15px;
+        }
+
+        .blip-card .blip-shared-time {
+            font-size: 13px;
+        }
+    }
+</style>
+
+{% if user.is_authenticated %}
+<div class="blips-con">
+    <div class="blip-h1-con">
+        <div class="text_home">
+            <h1> Home </h1>
+        </div>
+    </div>
+
+    <div id="share-blip" class="blip-share-card">
+        {% if form %}
+        {% if user.profile.profile_image %}
+        <img src="{{user.profile.profile_image.url}}" width=50 height=50 class="rounded-circle">
+        {% else %}
+        <img src="{% static 'images/def_pic.png' %}" width=50 height=50 class="img-fluid rounded-start">
+        {% endif %}
+        <form method="POST" action="{% url 'home' %}">
+            {% csrf_token %}
+            <!-- <div class="width">{{ form.as_p }}</div> -->
+            {{ form.as_p }}
+
+            <br>
+            <button type="submit" name="meep_form" class="blip-btn-submit">Blip</button>
+        </form>
+        {% endif %}
+    </div>
+    {% endif %}
+    {% for tweet in meeps %}
+    <div class="blip-card">
+        <div class="blip-img-con">
+            {% if tweet.user.profile.profile_image %}
+            <img src="{{ tweet.user.profile.profile_image.url }}">
+            {% else %}
+            <img src="{% static 'images/def_pic.png' %}">
+            {% endif %}
+        </div>
+        <div class="blip-text">
+            <div class="blipper-nickname">
+                <a href="{% url 'profile' tweet.user.id%}">
+                    @{{tweet.user.username}}
+                </a>
+                <span class="blip-shared-time"> {{ tweet.created_at|date:"F j, Y" }} </span>
+                <div class="blip-broadcast">
+                    {{tweet.body}}
+                </div>
+            </div>
+            <div class="line"></div>
+            <div class="blip-actions">
+                {% if user in tweet.likes.all %}
+                <a class="liked" href="{% url 'meep_like' tweet.id %}">
+                    <span class="liked-number"> {{ tweet.number_of_likes }} </span>
+                    <i class="fa-solid fa-heart"></i>
+                </a>
+                {% else %}
+                <a href="{% url 'meep_like' tweet.id %}">
+                    {{ tweet.number_of_likes }}
+                    <i class="fa-regular fa-heart"></i>
+                </a>
+                {% endif %}
+
+                <a href="{% url 'meep_show' tweet.id %}">
+                    <i class="fa-regular fa-comment"></i>
+                </a>
+                {% if request.user.username == tweet.user.username %}
+                <a href="{% url 'delete_meep' tweet.id %}">
+                    <i class="fa-solid fa-trash-can"></i>
+                </a>
+                <a href="{% url 'edit_meep' tweet.id %}">
+                    <i class="fa-solid fa-pen-to-square"></i>
+                </a>
+                {% endif %}
+                {% if request.user in tweet.bookmarks.all %}
+                <a class="bookmarked" href="{% url 'meep_book' tweet.id %}">
+                    <i class="fa-solid fa-bookmark"></i>
+                </a>
+                {% else %}
+                <a href="{% url 'meep_book' tweet.id %}">
+                    <i class="fa-regular fa-bookmark"></i>
+                </a>
+                {% endif %}
+
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+
+{% endblock %}

@@ -1,0 +1,540 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+{% if user.is_authenticated %}
+{% include 'accounts-navbar.html' %}
+{% endif %}
+
+<style>
+    .myprofile-con {
+        margin-left: var(--basic-ml);
+        border-right: 2px solid var(--bgBonusColor);
+        color: var(--textColor);
+        margin-right: var(--basic-mr);
+    }
+
+    .profile-text {
+        margin-left: calc(var(--h1-ml) - var(--basic-ml));
+        margin-bottom: var(--h1-mb);
+        color: var(--h1-color);
+        font-size: var(--h1-size);
+        text-transform: capitalize;
+        display: flex;
+        align-items: center;
+    }
+
+    .profile-text a {
+        font-size: 20px;
+        height: 30px;
+        width: 30px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: currentColor;
+        border-radius: 50%;
+        transition: 0.4s;
+    }
+
+    .profile-text a:hover {
+        background: var(--bgBonusColor);
+    }
+
+    .profile-bg-img {
+        height: 220px;
+    }
+
+    .profile-bg-img img {
+        object-fit: cover;
+        width: 100%;
+        height: 100%;
+    }
+
+    .profile-img-con img {
+        width: 135px;
+        height: 135px;
+        background: var(--bgColor);
+        cursor: pointer;
+        border-radius: 50%;
+        margin: -75px 0 0 0;
+        padding: 7px;
+    }
+
+    .edit-profile-btn {
+        padding: 5px 20px;
+        border: 1px solid currentColor;
+        background: transparent;
+        border-radius: 20px;
+        transition: 0.2s;
+        cursor: pointer;
+        color: var(--textColor);
+        font-weight: bold;
+    }
+
+    .img-and-btn {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .edit-profile-btn:hover {
+        background: var(--bgBonusColor);
+    }
+
+    .profile-info {
+        padding: 10px 15px;
+    }
+
+    .profile-nickname .name {
+        font-weight: bold;
+        font-size: 20px;
+        text-transform: capitalize;
+        color: #fff;
+    }
+
+    .profile-nickname .nickname {
+        margin: -5px 0 10px 0;
+        font-size: 15px;
+        color: var(--textBonusColor);
+    }
+
+    .profile-description {
+        margin: 10px 0;
+        font-size: 15px;
+    }
+
+    .profile-registration-date {
+        margin: 10px 0;
+        color: var(--textBonusColor);
+    }
+
+    .follows-and-followers {
+        display: flex;
+        gap: 20px;
+    }
+
+    .follows:hover,
+    .followers:hover {
+        text-decoration: underline;
+    }
+
+    .follows-and-followers span {
+        color: #fff;
+        padding-right: 3px;
+        font-size: 18px;
+    }
+
+    
+
+    .blip-card {
+        background: var(--bgColor);
+        color: var(--textColor);
+        padding: 20px;
+        display: flex;
+        gap: 20px;
+        position: relative;
+        border: 2px solid var(--bgBonusColor);
+        border-left: none;
+        margin-top: -1px;
+    }
+
+    .blip-card img {
+        height: 45px;
+        width: 45px;
+        object-fit: cover;
+        border-radius: 50%;
+    }
+
+    .blip-card a {
+        color: var(--textBonusColor);
+    }
+
+    .blip-card .blipper-nickname a {
+        font-size: 15px;
+    }
+
+    .blip-card .blipper-nickname a:hover {
+        text-decoration: underline;
+    }
+
+    .blip-card .blip-shared-time {
+        position: absolute;
+        right: 25px;
+        color: var(--textBonusColor);
+        font-size: 14px;
+    }
+
+    .blip-card .blip-broadcast {
+        margin-top: 5px;
+        padding-bottom: 50px;
+        font-size: 17px;
+    }
+
+    .blip-card .blip-actions {
+        display: flex;
+        justify-content: end;
+        gap: 30px;
+        font-size: 20px;
+        margin: 0 20px;
+        position: absolute;
+        left: 85px;
+        right: 15px;
+        bottom: 10px;
+    }
+
+    .blip-card .blip-actions .liked {
+        color: #f00;
+    }
+
+    .blip-card .blip-actions .bookmarked {
+        color: #ffc800;
+    }
+
+    .blip-card .blip-actions .liked-number {
+        color: var(--textBonusColor);
+    }
+
+    .line {
+        height: 1px;
+        background: var(--textColor);
+        margin: 20px 0;
+        position: absolute;
+        left: 80px;
+        right: 20px;
+        bottom: 30px;
+    }
+    
+
+
+    .tabs {
+        display: flex;
+        justify-content: space-around;
+        margin-top: 30px;
+        margin-bottom: 20px;
+        border-top: var(--bgColor);
+        border-bottom: var(--bgColor);
+        background-color: var(--bgColor);
+    }
+    .tab_name {
+        color: var(--textColor);
+    }
+    .tab {
+        padding: 10px 0;
+        flex: 1;
+        text-align: center;
+        cursor: pointer;
+        border-top: var(--bgColor);
+        border-bottom:var(--bgColor);
+        background-color: var(--bgColor);
+    }
+    .tab.active {
+        font-weight: bold;
+        border-bottom: var(--textBonusColor);
+        color: #1da1f2;
+    }
+    .content {
+        padding: 20px;
+    }
+    .content > div {
+        display: none;
+    }
+    .content > div.active {
+        display: block;
+    }
+
+
+
+
+    @media only screen and (max-width: 1290px) {
+        .profile-navbars a {
+            padding: 15px 75px;
+        }
+    }
+</style>
+
+<div class="myprofile-con">
+    <h1 class="profile-text">
+        <a href="{% url 'home' %}">
+            <i class="fa-solid fa-chevron-left"></i>
+        </a>
+        &nbsp; {{profile.user.username}}
+    </h1>
+
+    <header class="profile-header">
+        <div class="profile-bg-img">
+            {% if profile.back_image %}
+            <img src="{{profile.back_image.url}}" alt="">
+            {% else%}
+            <img src="https://i.pinimg.com/originals/d0/ef/d8/d0efd842cf1582ddc1b51183a65c36f4.jpg">
+            {% endif %}
+        </div>
+        <div class="profile-info">
+            <div class="img-and-btn">
+                <div class="profile-img-con">
+                    {% if profile.profile_image %}
+                    <img src="{{profile.profile_image.url}}" width=50 height=50 class="rounded-circle">
+                    {% else %}
+                    <img src="{% static 'images/def_pic.png' %}" width=50 height=50 class="img-fluid rounded-start">
+                    {% endif %}
+                </div>
+                <form method=POST>
+                    {% csrf_token %}
+                    {% if request.user != profile.user %}
+                    {% if profile in user.profile.follows.all %}
+                    <button class="edit-profile-btn" name="follow" value="unfollow" type="submit">
+                        Unfollow @{{profile.user.username|lower}}
+                    </button>
+                    {% else %}
+                    <button class="edit-profile-btn" name="follow" value="follow" type="submit">
+                        Follow @{{profile.user.username|lower}}
+                    </button>
+
+                    {% endif %}
+                    {% endif %}
+                </form>
+                {% if request.user.id == profile.user.id %}
+                <a class="edit-profile-btn" href="{% url 'update_user' %}"> Update profile </a>
+                {% endif %}
+            </div>
+            <div class="profile-nickname">
+                <p class="name"> {{profile.user.username}} </p>
+                <p class="nickname"> @{{profile.user.username}} </p>
+            </div>
+            <div class="profile-description">
+                {%if profile.profile_bio %}
+                {{profile.profile_bio}}
+                {% endif %}
+            </div>
+            <div class="profile-registration-date">
+
+                {% if profile.born_date %}
+                <i class="fa-solid fa-calendar-days"></i> &nbsp;
+                Birth date: {{profile.born_date|date:"F j, Y"}}
+                <br>
+                {% endif %}
+                <i class="fa-solid fa-calendar-days"></i> &nbsp;
+                Registration: {{profile.date_modified|date:"F j, Y"}}.
+            </div>
+            <div class="follows-and-followers">
+                <a class="follows" href="{% url 'follows' profile.user.id %}">
+                    <span> {{follow}} </span> Follows
+                </a>
+                <a class="followers" href="{%url 'followers' profile.id%}">
+                    <span> {{followers}} </span> Followers
+                </a>
+            </div>
+        </div>
+    </header>
+    <div class="tabs">
+        
+        <button class="tab active" onclick="showContent('tweets')"><div class="tab_name">Blips</div></button>
+        <button class="tab" onclick="showContent('replies')"><div class="tab_name">Comment</div></button>
+        <button class="tab" onclick="showContent('likes')"><div class="tab_name">Likes</div></button>
+    </div>
+    <div class="content">
+        <div id="tweets" class="active">
+            <div class="profile-blips-sec">
+                {% if meeps %}
+                {% for tweet in meeps %}
+                <div class="blip-card">
+                    <div class="blip-img-con">
+                        {% if tweet.user.profile.profile_image %}
+                        <img src="{{ tweet.user.profile.profile_image.url }}">
+                        {% else %}
+                        <img src="{% static 'images/def_pic.png' %}">
+                        {% endif %}
+                    </div>
+                    <div class="blip-text">
+                        <div class="blipper-nickname">
+                            <a href="{% url 'profile' tweet.user.id%}">
+                                @{{tweet.user.username}}
+                            </a>
+                            <span class="blip-shared-time"> {{ tweet.created_at|date:"F j, Y" }} </span>
+                            <div class="blip-broadcast">
+                                {{tweet.body}}
+                            </div>
+                        </div>
+                        <div class="line"></div>
+                        <div class="blip-actions">
+                            {% if user in tweet.likes.all %}
+                            <a class="liked" href="{% url 'meep_like' tweet.id %}">
+                                <span class="liked-number"> {{ tweet.number_of_likes }} </span>
+                                <i class="fa-solid fa-heart"></i>
+                            </a>
+                            {% else %}
+                            <a href="{% url 'meep_like' tweet.id %}">
+                                {{ tweet.number_of_likes }}
+                                <i class="fa-regular fa-heart"></i>
+                            </a>
+                            {% endif %}
+        
+                            <a href="{% url 'meep_show' tweet.id %}">
+                                <i class="fa-regular fa-comment"></i>
+                            </a>
+                            {% if request.user.username == tweet.user.username %}
+                            <a href="{% url 'delete_meep' tweet.id %}">
+                                <i class="fa-solid fa-trash-can"></i>
+                            </a>
+                            <a href="{% url 'edit_meep' tweet.id %}">
+                                <i class="fa-solid fa-pen-to-square"></i>
+                            </a>
+                            {% endif %}
+                            {% if request.user in tweet.bookmarks.all %}
+                            <a class="bookmarked" href="{% url 'meep_book' tweet.id %}">
+                                <i class="fa-solid fa-bookmark"></i>
+                            </a>
+                            {% else %}
+                            <a href="{% url 'meep_book' tweet.id %}">
+                                <i class="fa-regular fa-bookmark"></i>
+                            </a>
+                            {% endif %}
+        
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+                {% else %}
+                <h2>You did not post any blips yet . . .</h2>
+                {% endif %}
+            </div>
+        </div>
+        <div id="replies">
+            <div class="comment-side-con">
+                {% if comments %}
+                {% for comment in comments %}
+                <div class="com-card">
+                    <div class="com-img-con">
+                        {% if comment.user.profile.profile_image %}
+                        <img src="{{ comment.user.profile.profile_image.url}}">
+                        {% else %}
+                        <img src="{% static 'images/def_pic.png' %}">
+                        {% endif %}
+                    </div>
+                    <div class="com-main-con">
+                        <div class="com-text">
+                            <div class="com-username">
+                                <a href="{% url 'profile' comment.user.id%}" class="username"> @{{ comment.user.username }} </a>
+                                <p class="com-date"> {{ comment.created_at }} </p>
+                            </div>
+                            <p class="text-com"> {{ comment.comment }}  </p>
+                        </div>
+                        <div class="com-actions">
+                            <div class="com-like"> <!-- BECKEND KIRITING -->
+                                {% if user in comment.likes.all %} <!-- BECKEND KIRITING -->
+                                <a class="liked" href="{% url 'comment_like' comment.id %}">
+                                    <span class="liked-number"> {{comment.number_of_likes}} </span>
+                                    <i class="fa-solid fa-heart"></i>
+                                </a>
+                                {% else %}
+                                <a href="{% url 'comment_like' comment.id %}">
+                                    <span class="liked-number"> {{comment.number_of_likes}} </span>
+                                    <i class="fa-regular fa-heart"></i>
+                                </a>
+                                {% endif %}
+                            </div>
+                            {% if comment.user == request.user %}
+                            <div class="com-delete"> <!-- BECKEND KIRITING -->
+                                <a href="{% url 'delete_comment' comment.id %}">
+                                    <i class="fa-solid fa-trash-can"></i>
+                                </a>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+                {% else %}
+                <h2>You did not post any comments yet . . .</h2>
+                {% endif %}
+            </div>
+        </div>
+        <div id="likes">
+            <div class="profile-blips-sec">
+                {% if blips %}
+                {% for tweet in blips %}
+                <div class="blip-card">
+                    <div class="blip-img-con">
+                        {% if tweet.user.profile.profile_image %}
+                        <img src="{{ tweet.user.profile.profile_image.url }}">
+                        {% else %}
+                        <img src="{% static 'images/def_pic.png' %}">
+                        {% endif %}
+                    </div>
+                    <div class="blip-text">
+                        <div class="blipper-nickname">
+                            <a href="{% url 'profile' tweet.user.id%}">
+                                @{{tweet.user.username}}
+                            </a>
+                            <span class="blip-shared-time"> {{ tweet.created_at|date:"F j, Y" }} </span>
+                            <div class="blip-broadcast">
+                                {{tweet.body}}
+                            </div>
+                        </div>
+                        <div class="line"></div>
+                        <div class="blip-actions">
+                            {% if user in tweet.likes.all %}
+                            <a class="liked" href="{% url 'meep_like' tweet.id %}">
+                                <span class="liked-number"> {{ tweet.number_of_likes }} </span>
+                                <i class="fa-solid fa-heart"></i>
+                            </a>
+                            {% else %}
+                            <a href="{% url 'meep_like' tweet.id %}">
+                                {{ tweet.number_of_likes }}
+                                <i class="fa-regular fa-heart"></i>
+                            </a>
+                            {% endif %}
+        
+                            <a href="{% url 'meep_show' tweet.id %}">
+                                <i class="fa-regular fa-comment"></i>
+                            </a>
+                            {% if request.user.username == tweet.user.username %}
+                            <a href="{% url 'delete_meep' tweet.id %}">
+                                <i class="fa-solid fa-trash-can"></i>
+                            </a>
+                            <a href="{% url 'edit_meep' tweet.id %}">
+                                <i class="fa-solid fa-pen-to-square"></i>
+                            </a>
+                            {% endif %}
+                            {% if request.user in tweet.bookmarks.all %}
+                            <a class="bookmarked" href="{% url 'meep_book' tweet.id %}">
+                                <i class="fa-solid fa-bookmark"></i>
+                            </a>
+                            {% else %}
+                            <a href="{% url 'meep_book' tweet.id %}">
+                                <i class="fa-regular fa-bookmark"></i>
+                            </a>
+                            {% endif %}
+        
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+                {% else %}
+                <h2>You did not like any blips yet . . .</h2>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+</div>
+
+
+<script>
+    function showContent(id) {
+        // Hide all content
+        const contents = document.querySelectorAll('.content > div');
+        contents.forEach(content => content.classList.remove('active'));
+
+        // Remove active class from all tabs
+        const tabs = document.querySelectorAll('.tab');
+        tabs.forEach(tab => tab.classList.remove('active'));
+
+        // Show selected content
+        document.getElementById(id).classList.add('active');
+
+        // Set active class on clicked tab
+        event.target.classList.add('active');
+    }
+</script>
+
+{% endblock %}

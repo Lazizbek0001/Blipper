@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<style>
+	.update-profile-con {
+		margin-left: 300px;
+		color: var(--textColor);
+	}
+
+	.update-profile-text {
+		color: #fff;
+	}
+</style>
+
+<div class="update-profile-con">
+	<h1 class="update-profile-text">
+        <a href="{% url 'home' %}">
+            <i class="fa-solid fa-chevron-left"></i>
+        </a>
+		Update User
+    </h1>
+	<br />
+
+	<form method="POST" action="" enctype="multipart/form-data">
+		{% csrf_token %}
+		{{ user_form.as_p }}
+		<br />
+		{{ profile_form.as_p}}
+
+		<br /><br />
+		<button type="submit" class="btn btn-secondary">Update Profile</button>
+	</form>
+	<br>
+	<br>
+</div>
+
+
+{% endblock %}

@@ -1,0 +1,130 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<style>
+    .search-con {
+        color: var(--textColor);
+        margin-top: 5px;
+    }
+
+    .search-text {
+        font-size: 32px;
+        margin-bottom: 60px;
+        color: #fff;
+    }
+
+    .search-con input {
+        background: var(--textBonusColor);
+        font-size: 20px;
+        border-radius: 50px;
+        margin: 5px;
+        padding: 8px 15px;
+        width: 500px;
+        border: none;
+        margin-left: var(--h1-ml);
+    }
+
+    ::placeholder {
+        color: var(--bgColor);
+        opacity: .6;
+    }
+
+    .search-btn {
+        background: var(--textBonusColor);
+        font-size: 22px;
+        border-radius: 50px;
+        padding: 4px 15px 7px 13px;
+        border: 3px solid transparent;
+        cursor: pointer;
+    }
+
+    .searched-text {
+        margin-left: calc(var(--h1-ml) + 30px);
+        margin-bottom: 15px;
+    }
+
+    .searched-acc-card {
+        border: 1px solid var(--bgBonusColor);
+        border-left: none;
+        color: var(--textColor);
+        padding: 10px 10px 15px 20px;
+        font-size: 13px;
+        position: relative;
+        margin-left: var(--basic-ml);
+        margin-right: var(--basic-mr);
+    }
+
+    .search-acc-con {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    
+    .search-img-con img {
+        width: 40px;
+        height: 40px;
+        object-fit: cover;
+        border-radius: 50%;
+    }
+
+    .acc-card-user {
+        display: flex;
+        align-items: center;
+    }
+
+    .acc-card-user a {
+        color: var(--textBonusColor);
+    }
+
+    .follow-acc {
+        position: absolute;
+        right: 30px;
+        font-size: 15px;
+        background: var(--textColor);
+        padding: 5px 15px;
+        color: var(--bgBonusColor);
+        border-radius: 50px;
+        cursor: pointer;
+    }
+</style>
+
+<div class="search-con">
+    <form method="POST">
+        {% csrf_token %}
+        <input type="input" class="form-control" placeholder="Search User" name="search">
+        <button type="submit" class="search-btn"> <i class="fa-solid fa-magnifying-glass"></i> </button>
+    </form>
+    {% if search %}
+    <h3 class="searched-text"> Searched For: {{search}} </h3>
+    {% for result in searched %}
+
+    <div class="searched-acc-card">
+        <div class="search-acc-con">
+            <div class="search-img-con">
+                {% if result.profile.profile_image %}
+                <img src="{{result.profile.profile_image.url}}">
+                {% else %}
+                <img src="{% static 'images/def_pic.png' %}">
+                {% endif %}
+            </div>
+            <div>
+                <div class="acc-card-user">
+                    <div class="acc-card-name">
+                        <h2 class="search-card-title">
+                            {{result.profile.user.username}}
+                        </h2>
+                        <a href="{% url 'profile' result.profile.user.id %}">@{{result.profile.user.username|lower}}</a>
+                    </div>
+                    <p class="follow-acc">
+                        <a href="{% url 'profile' result.profile.user.id %}">Visit Profile</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endfor %}
+{%endif%}
+{% endblock %}

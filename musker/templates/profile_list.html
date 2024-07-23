@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<style>
+    .user_list-text {
+        margin-left: var(--h1-ml);
+        margin-bottom: var(--h1-mb);
+        font-size: var(--h1-size);
+        color: var(--h1-color);
+    }
+
+    .user-card {
+        margin-left: var(--basic-ml);
+        padding: 15px;
+        font-size: 15px;
+        color: var(--textColor);
+        margin-right: var(--basic-mr);
+        border: 1px solid var(--bgBonusColor);
+        position: relative;
+    }
+
+    .user-card-con {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
+
+    .user-card-img {
+        width: 50px;
+        height: 50px;
+    }
+
+    .user-card-img img {
+        border-radius: 50%;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .user-card-text {
+        display: flex;
+        align-items: center;
+    }
+
+    .user-card-name {
+        line-height: 27px;
+    }
+
+    .view-profile-btn {
+        position: absolute;
+        right: 30px;
+        padding: 5px 15px;
+        background: var(--textColor);
+        color: var(--bgColor);
+        border-radius: 50px;
+        cursor: pointer;
+    }
+</style>
+
+
+<div class="user_list-con">
+    <h1 class="user_list-text">Profile</h1>
+    {% if profiles %}
+    {% for profile in profiles %}
+
+    <div class="user-card">
+        <div class="user-card-con">
+            <div class="user-card-img">
+                {% if profile.profile_image %}
+                <img src="{{profile.profile_image.url}}">
+                {% else %}
+                <img src="{% static 'images/def_pic.png' %}">
+                {% endif %}
+            </div>
+            <div class="user-card-text">
+                <div class="user-card-name">
+                    <h2 class="">{{profile.user.username}}</h2>
+                    <a href="{% url 'profile' profile.user.id %}">@{{profile.user.username|lower}} </a>
+                </div>
+                <a class="view-profile-btn" href="{% url 'profile' profile.user.id %}"> 
+                    Visit Profile
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endfor %}
+{% endif %}
+{% endblock %}

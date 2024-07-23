@@ -1,0 +1,129 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<style>
+    .follows-text {
+        margin-left: var(--h1-ml);
+        margin-bottom: var(--h1-mb);
+        font-size: var(--h1-size);
+        color: var(--h1-color);
+        display: flex;
+        align-items: center;
+    }
+
+    .follows-text a {
+        color: currentColor;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 30px;
+        width: 30px;
+        border-radius: 50%;
+        transition: 0.4s;
+        font-size: 20px;
+    }
+
+    .follows-text a:hover {
+        background: var(--bgBonusColor);
+    }
+
+    .searched-acc-card {
+        border: 1px solid var(--bgBonusColor);
+        margin-right: var(--basic-mr);
+        border-left: none;
+        color: var(--textColor);
+        padding: 10px 10px 15px 20px;
+        font-size: 13px;
+        position: relative;
+        margin-left: var(--basic-ml);
+        max-width: 750px;
+    }
+
+    .search-acc-con {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .search-img-con {
+        width: 40px;
+        height: 40px;
+    }
+
+    .search-img-con img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 50%;
+    }
+
+    .acc-card-user {
+        display: flex;
+        align-items: center;
+    }
+
+    .acc-card-user a {
+        color: var(--textBonusColor);
+    }
+
+    .follow-acc {
+        position: absolute;
+        right: 30px;
+        font-size: 15px;
+        background: var(--textBonusColor);
+        padding: 5px 15px;
+        border-radius: 50px;
+        cursor: pointer;
+    }
+
+    .follow-acc a {
+        color: var(--bgBonusColor);
+    }
+</style>
+
+<div class="follows-con">
+    <h1 class="follows-text">
+        <a href="{% url 'profile' profiles.user.id %}">
+            <i class="fa-solid fa-chevron-left"></i>
+        </a>
+        &nbsp; {{profiles.user.username}}'s Follows
+    </h1>
+
+    {% if profiles %}
+    {% for profile in profiles.follows.all %}
+    <div class="searched-acc-card">
+        <div class="search-acc-con">
+            <div class="search-img-con">
+                {% if profile.profile_image %}
+                <img src="{{profile.profile_image.url}}" width=180 height="176" class="rounded-circle"
+                    alt="{{profile.username}}">
+                {% else %}
+                <img src="{% static 'images/def_pic.png' %}" width=180 height="176" class="img-fluid rounded-start"
+                    alt="Profile Image">
+                {% endif %}
+            </div>
+            <div>
+                <div class="acc-card-user">
+                    <div class="acc-card-name">
+                        <h2 class="search-card-title">
+                            {{profile.user.username}}
+                        </h2>
+                        <a href="{% url 'profile' profile.user.id %}">@{{profile.user.username|lower}}</a>
+                    </div>
+                    <div class="follow-acc">
+                        {% if request.user.profile in profile.followed_by.all %}
+                        <a href="{% url 'unfollow' profile.user.id %}"> Unfollow </a>
+                        {% else %}
+                        <a href="{% url 'follow' profile.user.id %}"> Follow </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+    {% endif %}
+</div>
+
+{% endblock %}

@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<style>
+    .login {
+        color: var(--textColor);
+        margin-left: 260px;
+    }
+    .text {
+        font-size: 26px;
+        margin-bottom: 30px;
+        margin-left: 40px;
+        color: #fff;
+    }
+    .login-con {
+        color: var(--textColor);
+        margin-left: 260px;
+    }
+
+    .login-text {
+        font-size: 32px;
+        margin-bottom: 60px;
+        margin-left: 40px;
+        color: #fff;
+    }
+
+    .login-con input {
+        background: var(--textBonusColor);
+        font-size: 20px;
+        border-radius: 50px;
+        margin: 10px;
+        padding: 10px 15px;
+        width: 400px;
+        display: block;
+        border: none;
+    }
+
+    ::placeholder {
+        color: var(--bgColor);
+        opacity: .6;
+    }
+
+    .login-btn {
+        background: var(--textBonusColor);
+        font-size: 22px;
+        border-radius: 50px;
+        margin: 10px;
+        padding: 5px 60px;
+        display: block;
+        border: 3px solid transparent;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+    .login-btn:hover {
+        background: transparent;
+        color: var(--textBonusColor);
+        border: 3px solid currentColor;
+    }
+
+
+
+
+
+    .register-btn {
+        background: var(--textBonusColor);
+        font-size: 22px;
+        border-radius: 50px;
+        margin: 50px;
+        padding: 5px 50px 5px 50px;
+        display: block;
+        border: 2px solid transparent;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+    .register-btn:hover {
+        background: transparent;
+        color: aqua;
+        border: 2px solid currentColor;
+    }
+</style>
+
+
+<div class="login-con">
+    <h2 class="login-text"> Login </h2>
+
+    <form method="POST" action="{% url 'login' %}">
+        {% csrf_token %}
+        <input type="text" class="form-control" name="username" placeholder="Enter your username">
+        <input type="password" class="form-control" name="password" placeholder="Enter your password">
+        <button type="submit" class="login-btn">
+            <i class="fa-solid fa-check"></i>
+            Submit
+        </button>
+    </form>
+</div>
+
+<div class="login">
+    <h2 class="text">Create an account?</h2>
+    
+        <a href="{% url 'register' %}"><button class="register-btn"> Sign up</button></a> 
+    
+</div>
+
+{% endblock %}

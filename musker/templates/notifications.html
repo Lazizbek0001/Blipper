@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<style>
+    .notif-text {
+        margin-left: var(--h1-ml);
+        margin-bottom: var(--h1-mb);
+        font-size: var(--h1-size);
+        color: var(--h1-color);
+        text-transform: capitalize;
+    }
+
+    .no {
+        color: aliceblue;
+    }
+
+    .notif-card {
+        background: var(--bgColor);
+        color: var(--textColor);
+        padding: 15px 30px 15px 15px;
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        position: relative;
+        margin: 0 var(--basic-mr) 0 var(--basic-ml);
+        border: 2px solid var(--bgBonusColor);
+        border-left: none;
+        margin-top: -1px;
+        font-size: 15px;
+    }
+
+    .notif-img-con img {
+        width: 40px;
+        height: 40px;
+        object-fit: cover;
+        border-radius: 50%;
+        cursor: pointer;
+        margin-top: 10px;
+    }
+
+    .notif-username {
+        font-weight: bold;
+        white-space: 30px;
+        margin: 0 -13px;
+    }
+</style>
+
+<div class="notifications-con">
+    <h1 class="notif-text">
+        Notifications
+    </h1>
+    {% if notifications %}
+    
+        {%for n in notifications %}
+
+        <div class="notif-card">
+            <div class="notif-img-con">
+                {% if profile.profile_image %}
+                <img src="{{profile.profile_image.url}}">
+                {% else %}
+                <img src="{% static 'images/def_pic.png' %}">
+                {% endif %}
+            </div>
+            {% if n.post %}
+            
+            <div class="notif-date"> {{n.date|date:"F j, Y"}} </div>
+            <span class="notif-username"> @{{n.requested_user}} </span>
+            {{n.body}} {{n.post}}
+
+            {% else %}
+
+            <span class="notif-date"> {{n.date|date:"F j, Y"}} </span>
+            <span class="notif-username"> @{{n.requested_user}} </span>
+            {{n.body}}
+
+            {% endif %}
+        </div>
+
+        {% endfor %}
+    {% else %}
+    <center>
+        <div class="no"><h2>No notifications . . .</h2></div>
+        
+    </center>
+    
+    {% endif %}
+</div>
+
+
+{% endblock %}

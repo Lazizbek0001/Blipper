@@ -1,0 +1,363 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<style>
+    .liked {
+        color: #f00;
+    }
+
+    .bookmarked {
+        color: #ffc800;
+    }
+
+    .line {
+        height: 1px;
+        width: 645px;
+        background: var(--textBonusColor);
+        margin: 20px 0 20px -10px;
+    }
+
+    .comment-con {
+        color: var(--textColor);
+    }
+
+    .comment-text {
+        margin-left: var(--h1-ml);
+        margin-bottom: var(--h1-mb);
+        font-size: var(--h1-size);
+        color: var(--h1-color);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .comment-text a {
+        color: currentColor;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 30px;
+        width: 30px;
+        border-radius: 50%;
+        transition: 0.4s;
+        font-size: 20px;
+    }
+    
+    .comment-text a:hover {
+        background: var(--bgBonusColor);
+    }
+
+    .com-blip-card {
+        background: var(--bgColor);
+        color: var(--textColor);
+        padding: 20px;
+        display: flex;
+        gap: 15px;
+        position: relative;
+        border: 2px solid var(--bgBonusColor);
+        border-left: none;
+        margin-right: var(--basic-mr);
+        margin-left: var(--basic-ml);
+    }
+
+    .com-blip-img-con img {
+        margin-top: 5px;
+        border-radius: 50%;
+        width: 35px;
+        height: 35px;
+        object-fit: cover;
+    }
+
+    .com-blip-username {
+        display: flex;
+        align-items: center;
+        padding-bottom: 10px;
+    }
+
+    .com-blip-username .username {
+        font-size: 14px;
+        color: var(--textBonusColor);
+    }
+
+    .com-blip-name-btn {
+        position: absolute;
+        right: 30px;
+        padding: 3px 15px;
+        border-radius: 30px;
+        cursor: pointer;
+        border: none;
+        background: var(--textColor);
+        color: var(--bgColor);
+    }
+
+    .blip-text {
+        margin-right: 30px;
+    }
+
+    .com-blip-action {
+        display: flex;
+        align-items: center;
+    }
+
+    .com-blip-date {
+        font-size: 13px;
+        color: var(--textBonusColor);
+    }
+
+    .blip-actions {
+        display: flex;
+        gap: 30px;
+        font-size: 22px;
+        position: absolute;
+        right: 40px;
+    }
+
+    .liked-number {
+        color: var(--textBonusColor);
+    }
+
+    .commenting-card {
+        background: var(--bgColor);
+        color: var(--textColor);
+        padding: 20px;
+        position: relative;
+        border: 2px solid var(--bgBonusColor);
+        border-top: none;
+        border-left: none;
+        margin-right: var(--basic-mr);
+        margin-left: var(--basic-ml);
+    }
+
+    .commenting-whom {
+        font-size: 12px;
+        margin: -5px 0 15px 15px;
+    }
+
+    .commenting-whom a {
+        color: var(--textBonusColor);
+        text-decoration: underline;
+    }
+
+    .commenting-sec {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
+
+    .commenting-img-con img {
+        margin-top: 5px;
+        border-radius: 50%;
+        width: 35px;
+        height: 35px;
+        object-fit: cover;
+    }
+
+    .commenting-sec form {
+        display: flex;
+        align-items: center;
+    }
+
+    .commenting-btn {
+        position: absolute;
+        right: 30px;
+        font-size: 15px;
+        padding: 5px 15px;
+        cursor: pointer;
+        border: none;
+        border-radius: 30px;
+        background: var(--textColor);
+        color: var(--bgColor);
+    }
+
+
+    .com-card {
+        color: var(--textColor);
+        margin-top: -1px;
+        padding: 20px 20px 40px 20px;
+        display: flex;
+        gap: 15px;
+        position: relative;
+        border: 2px solid var(--bgBonusColor);
+        border-left: none;
+        margin-right: var(--basic-mr);
+        margin-left: var(--basic-ml);
+    }
+
+    .com-img-con img {
+        margin-top: 5px;
+        border-radius: 50%;
+        width: 35px;
+        height: 35px;
+        object-fit: cover;
+    }
+
+    .com-username {
+        display: flex;
+        align-items: center;
+        margin-bottom: 5px;
+    }
+
+    .com-username .username {
+        font-size: 14px;
+        color: var(--textBonusColor);
+    }
+
+    .com-date {
+        font-size: 14px;
+        color: var(--textBonusColor);
+        position: absolute;
+        right: 30px;
+    }
+
+    .text-com {
+        margin-bottom: 10px;
+    }
+
+    .com-actions {
+        display: flex;
+        align-items: center;
+        gap: 30px;
+        font-size: 22px;
+        position: absolute;
+        right: 40px;
+    }
+</style>
+
+<div class="comment-con">
+    <h1 class="comment-text">
+        <a href="{% url 'home' %}">
+            <i class="fa-solid fa-chevron-left"></i>
+        </a>
+        {{tweet.user|title}}'s Blip
+    </h1>
+
+    <div class="blip_and_comment-con">
+        <div class="com-blip-card">
+            <div class="com-blip-img-con">
+                {% if tweet.user.profile.profile_image %}
+                    <img src="{{ tweet.user.profile.profile_image.url}}">
+                {% else %}
+                    <img src="{% static 'images/def_pic.png' %}">
+                {% endif %}
+            </div>
+            <div class="com-blip-main-con">
+                <div class="com-blip-text">
+                    <div class="com-blip-username">
+                        <a href="{% url 'profile' tweet.user.id %}" class="username"> @{{tweet.user|title}} </a>
+                        <button class="com-blip-name-btn"> Follow </button>
+                    </div>
+                    <p class="blip-text">
+                        {{tweet.body}}
+                    </p>
+                </div>
+                <div class="line"></div>
+                <div class="com-blip-action">
+                    <p class="com-blip-date">
+                        {{ tweet.created_at|date:"F j, Y" }}
+                    </p>
+                    <div class="blip-actions">
+                        <div class="com-blip-like">
+                            {% if user in tweet.likes.all %}
+                            <a class="liked" href="{% url 'meep_like' tweet.id %}">
+                                <span class="liked-number"> {{ tweet.number_of_likes }} </span>
+                                <i class="fa-solid fa-heart"></i>
+                            </a>
+                            {% else %}
+                            <a href="{% url 'meep_like' tweet.id %}">
+                                <span class="liked-number"> {{ tweet.number_of_likes }} </span>
+                                <i class="fa-regular fa-heart"></i>
+                            </a>
+                            {% endif %}
+                        </div>
+                        <div class="com-blip-bookmark">
+                            {% if request.user in tweet.bookmarks.all %}
+                            <a class="bookmarked" href="{% url 'meep_book' tweet.id %}">
+                                <i class="fa-solid fa-bookmark"></i>
+                            </a>
+                            {% else %}
+                            <a href="{% url 'meep_book' tweet.id %}">
+                                <i class="fa-regular fa-bookmark"></i>
+                            </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="commenting-card">
+            <p class="commenting-whom">
+                Commenting to
+                <a href="{% url 'profile' tweet.user.id%}">
+                    @{{tweet.user|title}}
+                </a>
+            </p>
+            {% if request.user.is_authenticated %}
+            <div class="commenting-sec">
+                <div class="commenting-img-con">
+                    {% if request.user.profile.profile_image %}
+                     <img src="{{ request.user.profile.profile_image.url}}">
+                    {% else %}
+                     <img src="{% static 'images/def_pic.png' %}">
+                    {% endif %}
+                </div>
+                <form method="POST" action="{% url 'post_comment' tweet.id %}">
+                    {% csrf_token %}
+                    <div class="input">
+                        {{ comment_form.as_p }}
+                    </div>
+                    <button type="submit" class="commenting-btn"> Comment </button>
+                </form>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+
+    <div class="comment-side-con">
+        {% for comment in tweet.comments.all %}
+        <div class="com-card">
+            <div class="com-img-con">
+                {% if comment.user.profile.profile_image %}
+                <img src="{{ comment.user.profile.profile_image.url}}">
+                {% else %}
+                <img src="{% static 'images/def_pic.png' %}">
+                {% endif %}
+            </div>
+            <div class="com-main-con">
+                <div class="com-text">
+                    <div class="com-username">
+                        <a href="{% url 'profile' tweet.user.id%}" class="username"> @{{ comment.user.username }} </a>
+                        <p class="com-date"> {{ comment.created_at|date:"F j, Y" }} </p>
+                    </div>
+                    <p class="text-com"> {{ comment.comment }}  </p>
+                </div>
+                <div class="com-actions">
+                    <div class="com-like"> <!-- BECKEND KIRITING -->
+                        {% if user in comment.likes.all %} <!-- BECKEND KIRITING -->
+                        <a class="liked" href="{% url 'comment_like' comment.id %}">
+                            <span class="liked-number"> {{comment.number_of_likes}} </span>
+                            <i class="fa-solid fa-heart"></i>
+                        </a>
+                        {% else %}
+                        <a href="{% url 'comment_like' comment.id %}">
+                            <span class="liked-number"> {{comment.number_of_likes}} </span>
+                            <i class="fa-regular fa-heart"></i>
+                        </a>
+                        {% endif %}
+                    </div>
+                    {% if comment.user == request.user %}
+                    <div class="com-delete"> <!-- BECKEND KIRITING -->
+                        <a href="{% url 'delete_comment' comment.id %}">
+                            <i class="fa-solid fa-trash-can"></i>
+                        </a>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}
