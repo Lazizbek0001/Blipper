@@ -4,14 +4,14 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 
 class ProfilePicform(forms.ModelForm):
-    profile_image = forms.ImageField(label="Profile Pictures")
-    back_image = forms.ImageField(label="Background Picture")
-    profile_bio = forms.CharField(label="Profile Bio",widget=forms.Textarea(attrs={'class':'form-control', 'placeholder':'Profile Bio'}))
-    homepage_link = forms.CharField(label="",widget=forms.TextInput(attrs={'class':'form-control', 'placeholder':'Website link'}))
-    facebook_link = forms.CharField(label="",widget=forms.TextInput(attrs={'class':'form-control', 'placeholder':'Facebook link'}))
-    instagram_link = forms.CharField(label="",widget=forms.TextInput(attrs={'class':'form-control', 'placeholder':'Instagram link'}))
-    linkedln_link = forms.CharField(label="",widget=forms.TextInput(attrs={'class':'form-control', 'placeholder':'Linkedln link'}))
-    born_date = forms.DateTimeField(label="Birth date", widget=forms.TextInput(attrs={'class': 'form-control','placeholder':'Year-Month-Day'}))
+    profile_image = forms.ImageField(label="Profile Pictures", required=False)
+    back_image = forms.ImageField(label="Background Picture", required=False)
+    profile_bio = forms.CharField(label="Profile Bio",widget=forms.Textarea(attrs={'class':'form-control', 'placeholder':'Profile Bio'}), required=False)
+    homepage_link = forms.CharField(label="",widget=forms.TextInput(attrs={'class':'form-control', 'placeholder':'Website link'}), required=False)
+    facebook_link = forms.CharField(label="",widget=forms.TextInput(attrs={'class':'form-control', 'placeholder':'Facebook link'}), required=False)
+    instagram_link = forms.CharField(label="",widget=forms.TextInput(attrs={'class':'form-control', 'placeholder':'Instagram link'}), required=False)
+    linkedln_link = forms.CharField(label="",widget=forms.TextInput(attrs={'class':'form-control', 'placeholder':'Linkedln link'}), required=False)
+    born_date = forms.DateTimeField(label="Birth date", widget=forms.TextInput(attrs={'class': 'form-control','placeholder':'Year-Month-Day'}), required=False)
 
     class Meta:
         model = Profile
@@ -79,9 +79,9 @@ class CommentForm(forms.ModelForm):
         
 
 class SignUpForm(UserCreationForm):
-    email = forms.EmailField(label="", widget=forms.TextInput(attrs={'class':'form-control', 'placeholder':'Email Address'}))
-    first_name = forms.CharField(label="", max_length=100, widget=forms.TextInput(attrs={'class':'form-control', 'placeholder':'First Name'}))
-    last_name = forms.CharField(label="", max_length=100, widget=forms.TextInput(attrs={'class':'form-control', 'placeholder':'Last Name'}))
+    email = forms.EmailField(label="", widget=forms.TextInput(attrs={'class':'form-control', 'placeholder':'Email Address'}), required=False)
+    first_name = forms.CharField(label="", max_length=100, widget=forms.TextInput(attrs={'class':'form-control', 'placeholder':'First Name'}), required=False)
+    last_name = forms.CharField(label="", max_length=100, widget=forms.TextInput(attrs={'class':'form-control', 'placeholder':'Last Name'}), required=False)
     
     class Meta:
         model = User
